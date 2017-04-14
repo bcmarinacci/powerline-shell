@@ -1,18 +1,17 @@
 # powerline-shell
 
-> Powerline in pure Bash
+> A Powerline-style shell prompt written in pure Bash
 
 ![powerline-shell](https://raw.githubusercontent.com/bcmarinacci/powerline-shell/master/powerline-shell.png)
 
-## Features
+## Git Status Indicators
 
-- Displays ⎇ + the current git branch name, tag, or short SHA-1 hash if the head is detached
-- Displays ✓ when the current branch is clean
-- Displays ✗ when the current branch is dirty
-- Displays ⇡ + the number of commits when the current branch is ahead of the remote
-- Displays ⇣ + the number of commits when the current branch is behind the remote
-- Executes quickly
-- Does not require patched fonts
+- `⎇`: currently checked-out branch, tag, or short SHA-1 hash if the head is detached
+- `✓`: repository is clean
+- `✗`: repository is dirty
+- `+n`: there are `n` staged files
+- `⇡n`: local is ahead of remote by `n` commits
+- `⇣n`: local is behind remote by `n` commits
 
 ## Installation
 
@@ -28,6 +27,4 @@ Then `source` it in your `.bash_profile` (or `.bashrc`):
 $ printf "\nsource ~/.powerline-shell.bash\n" >> ~/.bash_profile
 ```
 
-This shell prompt was inspired by [bash-powerline](https://github.com/riobard/bash-powerline).
-
-The theme from the screenshot is [Tomorrow Night Eighties](https://github.com/chriskempson/tomorrow-theme/tree/master/OS%20X%20Terminal).
+The theme used in the screenshot is [Tomorrow Night Eighties](https://github.com/chriskempson/tomorrow-theme/blob/master/OS%20X%20Terminal/Tomorrow%20Night%20Eighties.terminal) by Chris Kempson.

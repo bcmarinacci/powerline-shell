@@ -4,6 +4,7 @@ __powerline() {
   readonly branch_indicator='⎇'
   readonly clean_indicator='✓'
   readonly dirty_indicator='✗'
+  readonly staged_indicator='+'
   readonly push_indicator='⇡'
   readonly pull_indicator='⇣'
   readonly color_fg_base="\[$(tput setaf 0)\]"
@@ -19,6 +20,8 @@ __powerline() {
     [ -n "$branch" ] || return
     local status_indicators="$clean_indicator"
     [ -n "$($git_en status --porcelain)" ] && status_indicators="$dirty_indicator"
+    local -r staged_files="$($git_en status --porcelain | egrep '^(M|A|D|R|C|U)' | wc -l | egrep -o '\d+')"
+    [ $staged_files -gt 0 ] && status_indicators+=" $staged_indicator$staged_files"
 
     __branch_status() {
       $git_en status --branch --porcelain | egrep '^##' | egrep -o "$1 \d+" | egrep -o '\d'
