@@ -10,6 +10,7 @@
 - `✓`: repository is clean
 - `✗`: repository is dirty
 - `+n`: there are `n` staged files
+- `-n`: there are `n` unstaged files
 - `⇡n`: local is ahead of remote by `n` commits
 - `⇣n`: local is behind remote by `n` commits
 
