@@ -6,6 +6,7 @@ __powerline() {
   readonly dirty_indicator='✗'
   readonly staged_indicator='+'
   readonly unstaged_indicator='-'
+  readonly untracked_indicator='?'
   readonly push_indicator='⇡'
   readonly pull_indicator='⇣'
   readonly color_fg_base="\[$(tput setaf 0)\]"
@@ -30,6 +31,8 @@ __powerline() {
     [ $staged_files -gt 0 ] && status_indicators+=" $staged_indicator$staged_files"
     local -r unstaged_files=$(__num_files '^.[A-Z]')
     [ $unstaged_files -gt 0 ] && status_indicators+=" $unstaged_indicator$unstaged_files"
+    local -r untracked_files=$(__num_files '^\?\?')
+    [ $untracked_files -gt 0 ] && status_indicators+=" $untracked_indicator$untracked_files"
 
     __branch_status() {
       $git_en status --branch --porcelain | egrep '^##' | egrep -o "$1 \d+" | egrep -o '\d'
