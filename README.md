@@ -14,6 +14,8 @@
 - `?n`: there are `n` untracked files
 - `⇡n`: local is ahead of remote by `n` commits
 - `⇣n`: local is behind remote by `n` commits
+- Beginning of prompt is `green`: the exit code of the last command was 0
+- Beginning of prompt is `red`: the exit code of the last command was a nonzero number
 
 ## Installation
 

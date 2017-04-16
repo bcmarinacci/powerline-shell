@@ -11,7 +11,9 @@ __powerline() {
   readonly pull_indicator='⇣'
   readonly color_fg_base="\[$(tput setaf 0)\]"
   readonly color_bg_base="\[$(tput setab 7)\]"
-  readonly color_bg_git="\[$(tput setab 1)\]"
+  readonly color_bg_exit_nonzero="\[$(tput setab 1)\]"
+  readonly color_bg_exit_zero="\[$(tput setab 2)\]"
+  readonly color_bg_git="\[$(tput setab 3)\]"
   readonly color_reset="\[$(tput sgr0)\]"
 
   __repository_status() {
@@ -35,7 +37,7 @@ __powerline() {
     [ $untracked_files -gt 0 ] && status_indicators+=" $untracked_indicator$untracked_files"
 
     __branch_status() {
-      $git_en status --branch --porcelain | egrep '^##' | egrep -o "$1 \d+" | egrep -o '\d'
+      $git_en status --branch --porcelain | egrep '^##' | egrep -o "$1 \d+" | egrep -o '\d+'
     }
 
     local -r commits_ahead="$(__branch_status ahead)"
@@ -45,16 +47,26 @@ __powerline() {
     printf " $branch_indicator  $branch $status_indicators "
   }
 
+  __exit_status() {
+    echo "$1$color_fg_base $color_reset"
+  }
+
   __ps1() {
-    PS1="$color_bg_base$color_fg_base \w $color_reset"
+    if [ $? -eq 0 ]; then
+      PS1="$(__exit_status $color_bg_exit_zero)"
+    else
+      PS1="$(__exit_status $color_bg_exit_nonzero)"
+    fi
+
+    PS1+="$color_bg_base$color_fg_base \w $color_reset"
     PS1+="$color_bg_git$color_fg_base"
     # Description: https://github.com/njhartwell/pw3nage
     # Related fix in git-bash: https://github.com/git/git/blob/9d77b0405ce6b471cb5ce3a904368fc25e55643d/contrib/completion/git-prompt.sh#L324
     if shopt -q promptvars; then
-        escaped_repository_status="$(__repository_status)"
-        PS1+="\${escaped_repository_status}"
+      escaped_repository_status="$(__repository_status)"
+      PS1+="\${escaped_repository_status}"
     else
-        PS1+="$(__repository_status)"
+      PS1+="$(__repository_status)"
     fi
 
     PS1+="$color_reset\n└─▪ "
