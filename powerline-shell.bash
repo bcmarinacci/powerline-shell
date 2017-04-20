@@ -16,6 +16,14 @@ __powerline() {
   readonly color_bg_git="\[$(tput setab 3)\]"
   readonly color_reset="\[$(tput sgr0)\]"
 
+  __num_files() {
+    $git_en status --porcelain | egrep "$1" | wc -l | egrep -o '\d+'
+  }
+
+  __branch_status() {
+    $git_en status --branch --porcelain | egrep '^##' | egrep -o "$1 \d+" | egrep -o '\d+'
+  }
+
   __repository_status() {
     [ -x $(hash git 2>/dev/null) ] || return
     local -r git_en="env LANG=C git"
@@ -25,20 +33,12 @@ __powerline() {
     local status_indicators="$clean_indicator"
     [ -n "$($git_en status --porcelain)" ] && status_indicators="$dirty_indicator"
 
-    __num_files() {
-      $git_en status --porcelain | egrep "$1" | wc -l | egrep -o '\d+'
-    }
-
     local -r staged_files=$(__num_files '^[A-Z]')
     [ $staged_files -gt 0 ] && status_indicators+=" $staged_indicator$staged_files"
     local -r unstaged_files=$(__num_files '^.[A-Z]')
     [ $unstaged_files -gt 0 ] && status_indicators+=" $unstaged_indicator$unstaged_files"
     local -r untracked_files=$(__num_files '^\?\?')
     [ $untracked_files -gt 0 ] && status_indicators+=" $untracked_indicator$untracked_files"
-
-    __branch_status() {
-      $git_en status --branch --porcelain | egrep '^##' | egrep -o "$1 \d+" | egrep -o '\d+'
-    }
 
     local -r commits_ahead="$(__branch_status ahead)"
     [ -n "$commits_ahead" ] && status_indicators+=" $push_indicator$commits_ahead"
@@ -48,7 +48,7 @@ __powerline() {
   }
 
   __exit_status() {
-    echo "$1$color_fg_base $color_reset"
+    printf "$1 $color_reset"
   }
 
   __ps1() {
