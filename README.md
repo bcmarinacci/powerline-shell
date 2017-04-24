@@ -12,6 +12,7 @@
 - `+n`: there are `n` staged files
 - `-n`: there are `n` unstaged files
 - `?n`: there are `n` untracked files
+- `¢n`: there are `n` stashes
 - `⇡n`: local is ahead of remote by `n` commits
 - `⇣n`: local is behind remote by `n` commits
 - Beginning of prompt is `green`: the exit code of the last command was 0
