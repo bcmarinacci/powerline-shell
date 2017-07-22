@@ -2,7 +2,7 @@
 
 > A Powerline-style shell prompt written in pure Bash
 
-![powerline-shell](https://raw.githubusercontent.com/bcmarinacci/powerline-shell/master/powerline-shell.png)
+![powerline-shell](https://raw.githubusercontent.com/bcmarinacci/powerline-shell/master/screenshot.png)
 
 ## Features
 
