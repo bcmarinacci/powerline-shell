@@ -4,6 +4,13 @@
 
 ![powerline-shell](https://raw.githubusercontent.com/bcmarinacci/powerline-shell/master/powerline-shell.png)
 
+## Features
+
+- If the start of the prompt is green, the exit code of the last command was 0
+- If the start of the prompt is red, the exit code of the last command was a nonzero number
+- If the current working directory is a Git repository, show the path relative to the repository's top-level directory
+- If the current working directory is not a Git repository, show the absolute path of the directory
+
 ## Git Status Indicators
 
 - `⎇`: currently checked-out branch, tag, or short SHA-1 hash if the head is detached
@@ -15,8 +22,6 @@
 - `¢n`: there are `n` stashes
 - `⇡n`: local is ahead of remote by `n` commits
 - `⇣n`: local is behind remote by `n` commits
-- Beginning of prompt is `green`: the exit code of the last command was 0
-- Beginning of prompt is `red`: the exit code of the last command was a nonzero number
 
 ## Installation
 
