@@ -10,6 +10,7 @@ __ps_main() {
   readonly __ps_stash_indicator='¢'
   readonly __ps_push_indicator='⇡'
   readonly __ps_pull_indicator='⇣'
+
   readonly __ps_color_fg_base="\[$(tput setaf 0)\]"
   readonly __ps_color_bg_base="\[$(tput setab 7)\]"
   readonly __ps_color_bg_exit_nonzero="\[$(tput setab 1)\]"
@@ -17,10 +18,11 @@ __ps_main() {
   readonly __ps_color_bg_git="\[$(tput setab 3)\]"
   readonly __ps_color_reset="\[$(tput sgr0)\]"
 
+  readonly git_en="env LANG=C git"
+
   __ps_repository_status() {
     type git > /dev/null 2>&1 || return
 
-    local -r git_en="env LANG=C git"
     local -r branch=$($git_en symbolic-ref --short HEAD 2>/dev/null || $git_en describe --tags --always 2>/dev/null)
 
     [[ -n "$branch" ]] || return
@@ -54,8 +56,22 @@ __ps_main() {
       PS1="$__ps_color_bg_exit_nonzero "
     fi
 
-    PS1+="$__ps_color_reset$__ps_color_bg_base$__ps_color_fg_base \w "
-    PS1+="$__ps_color_reset$__ps_color_bg_git$__ps_color_fg_base"
+    PS1+="$__ps_color_reset$__ps_color_bg_base$__ps_color_fg_base "
+
+    local -r prefix=$($git_en rev-parse --show-prefix 2>/dev/null)
+    local -r toplevel=$($git_en rev-parse --show-toplevel 2>/dev/null)
+    local -r git_dir=$($git_en rev-parse --git-dir 2>/dev/null)
+
+    if [[ -n "$prefix" ]]; then
+      PS1+="$(basename $toplevel)/${prefix%/}"
+    elif [[ -d "$git_dir" && "$toplevel" = "$(pwd)" ]]; then
+      PS1+="\W"
+    else
+      PS1+="\w"
+    fi
+
+    PS1+=" $__ps_color_reset$__ps_color_bg_git$__ps_color_fg_base"
+
     # Description: https://github.com/njhartwell/pw3nage
     # Related fix in git-bash: https://github.com/git/git/blob/9d77b0405ce6b471cb5ce3a904368fc25e55643d/contrib/completion/git-prompt.sh#L324
     if shopt -q promptvars; then
