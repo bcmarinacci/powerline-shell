@@ -37,4 +37,10 @@ Then `source` it in your `.bash_profile` (or `.bashrc`):
 $ printf "\nsource ~/.powerline-shell.bash\n" >> ~/.bash_profile
 ```
 
-The theme used in the screenshot is [Tomorrow Night Eighties](https://github.com/chriskempson/tomorrow-theme/blob/master/OS%20X%20Terminal/Tomorrow%20Night%20Eighties.terminal) by Chris Kempson.
+# Prior Art
+
+powerline-shell was inspired by the following phenomenal packages:
+- [Powerline](https://github.com/powerline/powerline)
+- [bash-git-prompt](https://github.com/magicmonty/bash-git-prompt)
+- [bash-powerline](https://github.com/riobard/bash-powerline)
+- [Tomorrow Night Eighties](https://github.com/chriskempson/tomorrow-theme)
