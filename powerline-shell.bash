@@ -23,32 +23,32 @@ __ps_main() {
     local -r git_en="env LANG=C git"
     local -r branch=$($git_en symbolic-ref --short HEAD 2>/dev/null || $git_en describe --tags --always 2>/dev/null)
 
-    [ -n "$branch" ] || return
+    [[ -n "$branch" ]] || return
 
-    if [ -z "$($git_en status --porcelain)" ]; then
+    if [[ -z "$($git_en status --porcelain)" ]]; then
       local status_indicators="$__ps_clean_indicator"
     else
       local status_indicators="$__ps_dirty_indicator"
     fi
 
     local -r staged_files=$($git_en status --porcelain | egrep '^[A-Z]' | wc -l | egrep -o '\d+')
-    [ $staged_files -gt 0 ] 2>/dev/null && status_indicators+=" $__ps_staged_indicator$staged_files"
+    [[ $staged_files -gt 0 ]] 2>/dev/null && status_indicators+=" $__ps_staged_indicator$staged_files"
     local -r unstaged_files=$($git_en status --porcelain | egrep '^.[A-Z]' | wc -l | egrep -o '\d+')
-    [ $unstaged_files -gt 0 ] 2>/dev/null && status_indicators+=" $__ps_unstaged_indicator$unstaged_files"
+    [[ $unstaged_files -gt 0 ]] 2>/dev/null && status_indicators+=" $__ps_unstaged_indicator$unstaged_files"
     local -r untracked_files=$($git_en status --porcelain | egrep '^\?\?' | wc -l | egrep -o '\d+')
-    [ $untracked_files -gt 0 ] 2>/dev/null && status_indicators+=" $__ps_untracked_indicator$untracked_files"
+    [[ $untracked_files -gt 0 ]] 2>/dev/null && status_indicators+=" $__ps_untracked_indicator$untracked_files"
     local -r stash_items=$($git_en stash list | wc -l | egrep -o '\d+')
-    [ $stash_items -gt 0 ] 2>/dev/null && status_indicators+=" $__ps_stash_indicator$stash_items"
+    [[ $stash_items -gt 0 ]] 2>/dev/null && status_indicators+=" $__ps_stash_indicator$stash_items"
     local -r commits_ahead=$($git_en status --branch --porcelain | egrep '^##' | egrep -o 'ahead \d+' | egrep -o '\d+')
-    [ -n "$commits_ahead" ] && status_indicators+=" $__ps_push_indicator$commits_ahead"
+    [[ -n "$commits_ahead" ]] && status_indicators+=" $__ps_push_indicator$commits_ahead"
     local -r commits_behind=$($git_en status --branch --porcelain | egrep '^##' | egrep -o 'behind \d+' | egrep -o '\d+')
-    [ -n "$commits_behind" ] && status_indicators+=" $__ps_pull_indicator$commits_behind"
+    [[ -n "$commits_behind" ]] && status_indicators+=" $__ps_pull_indicator$commits_behind"
 
     printf " $__ps_branch_indicator  $branch $status_indicators "
   }
 
   __ps_ps1() {
-    if [ $? -eq 0 ]; then
+    if [[ $? -eq 0 ]]; then
       PS1="$__ps_color_bg_exit_zero "
     else
       PS1="$__ps_color_bg_exit_nonzero "
