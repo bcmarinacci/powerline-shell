@@ -18,7 +18,7 @@ __ps_main() {
   readonly __ps_color_reset="\[$(tput sgr0)\]"
 
   __ps_repository_status() {
-    [ -x $(hash git 2>/dev/null) ] || return
+    type git > /dev/null 2>&1 || return
 
     local -r git_en="env LANG=C git"
     local -r branch=$($git_en symbolic-ref --short HEAD 2>/dev/null || $git_en describe --tags --always 2>/dev/null)
