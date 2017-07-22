@@ -81,7 +81,7 @@ __ps_main() {
       PS1+="$(__ps_repository_status)"
     fi
 
-    PS1+="$__ps_color_reset\n└─▪ "
+    PS1+="$__ps_color_reset\n└─$ "
   }
 
   PROMPT_COMMAND="__ps_ps1; $PROMPT_COMMAND"
