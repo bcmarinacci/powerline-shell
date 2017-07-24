@@ -27,23 +27,25 @@ __ps_main() {
 
     [[ -n "$branch" ]] || return
 
-    if [[ -z "$($git_en status --porcelain)" ]]; then
+    local -r git_status=$($git_en status --porcelain)
+    if [[ -z "$git_status" ]]; then
       local status_indicators="$__ps_clean_indicator"
     else
       local status_indicators="$__ps_dirty_indicator"
     fi
 
-    local -r staged_files=$($git_en status --porcelain | egrep '^[A-Z]' | wc -l | egrep -o '\d+')
+    local -r staged_files=$(echo "$git_status" | egrep '^[A-Z]' | wc -l | egrep -o '\d+')
     [[ $staged_files -gt 0 ]] 2>/dev/null && status_indicators+=" $__ps_staged_indicator$staged_files"
-    local -r unstaged_files=$($git_en status --porcelain | egrep '^.[A-Z]' | wc -l | egrep -o '\d+')
+    local -r unstaged_files=$(echo "$git_status" | egrep '^.[A-Z]' | wc -l | egrep -o '\d+')
     [[ $unstaged_files -gt 0 ]] 2>/dev/null && status_indicators+=" $__ps_unstaged_indicator$unstaged_files"
-    local -r untracked_files=$($git_en status --porcelain | egrep '^\?\?' | wc -l | egrep -o '\d+')
+    local -r untracked_files=$(echo "$git_status" | egrep '^\?\?' | wc -l | egrep -o '\d+')
     [[ $untracked_files -gt 0 ]] 2>/dev/null && status_indicators+=" $__ps_untracked_indicator$untracked_files"
     local -r stash_items=$($git_en stash list | wc -l | egrep -o '\d+')
     [[ $stash_items -gt 0 ]] 2>/dev/null && status_indicators+=" $__ps_stash_indicator$stash_items"
-    local -r commits_ahead=$($git_en status --branch --porcelain | egrep '^##' | egrep -o 'ahead \d+' | egrep -o '\d+')
+    local -r git_status_branch=$($git_en status --porcelain --branch)
+    local -r commits_ahead=$(echo "$git_status_branch" | egrep '^##' | egrep -o 'ahead \d+' | egrep -o '\d+')
     [[ -n "$commits_ahead" ]] && status_indicators+=" $__ps_push_indicator$commits_ahead"
-    local -r commits_behind=$($git_en status --branch --porcelain | egrep '^##' | egrep -o 'behind \d+' | egrep -o '\d+')
+    local -r commits_behind=$(echo "$git_status_branch" | egrep '^##' | egrep -o 'behind \d+' | egrep -o '\d+')
     [[ -n "$commits_behind" ]] && status_indicators+=" $__ps_pull_indicator$commits_behind"
 
     printf " $__ps_branch_indicator  $branch $status_indicators "
@@ -61,7 +63,6 @@ __ps_main() {
     local -r prefix=$($git_en rev-parse --show-prefix 2>/dev/null)
     local -r toplevel=$($git_en rev-parse --show-toplevel 2>/dev/null)
     local -r git_dir=$($git_en rev-parse --git-dir 2>/dev/null)
-
     if [[ -n "$prefix" ]]; then
       PS1+="$(basename $toplevel)/${prefix%/}"
     elif [[ -d "$git_dir" && "$toplevel" = "$(pwd)" ]]; then
