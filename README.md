@@ -31,10 +31,10 @@ Download the Bash script:
 $ curl https://raw.githubusercontent.com/bcmarinacci/powerline-shell/master/powerline-shell.bash > ~/.powerline-shell.bash
 ```
 
-Then `source` it in your `.bash_profile` (or `.bashrc`):
+Then source it in your `.bashrc` (or `.bash_profile`):
 
 ```bash
-$ printf "\nsource ~/.powerline-shell.bash\n" >> ~/.bash_profile
+$ printf ". ~/.powerline-shell.bash\n" >> ~/.bash_profile
 ```
 
 ## Prior Art
