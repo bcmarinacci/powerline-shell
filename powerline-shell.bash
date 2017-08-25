@@ -19,6 +19,7 @@ __ps_main() {
   readonly __ps_color_reset="\[$(tput sgr0)\]"
 
   readonly git_en="env LANG=C git"
+  readonly git_timeout=5
 
   __ps_repository_status() {
     type git > /dev/null 2>&1 || return
@@ -26,6 +27,20 @@ __ps_main() {
     local -r branch=$($git_en symbolic-ref --short HEAD 2>/dev/null || $git_en describe --tags --always 2>/dev/null)
 
     [[ -n "$branch" ]] || return
+
+    local FETCH_HEAD="$1/.git/FETCH_HEAD"
+    local matches=$("find" "$FETCH_HEAD" -mmin +"$git_timeout" 2> /dev/null)
+    if [[ ! -e "$FETCH_HEAD" ]] || [[ -n "$matches" ]]
+    then
+      if [[ -n $(git remote show) ]]; then
+        (
+          {
+              eval "git fetch --quiet" &> /dev/null
+          }&
+          disown -h
+        )
+      fi
+    fi
 
     local -r git_status=$($git_en status --porcelain)
     if [[ -z "$git_status" ]]; then
@@ -76,10 +91,10 @@ __ps_main() {
     # Description: https://github.com/njhartwell/pw3nage
     # Related fix in git-bash: https://github.com/git/git/blob/9d77b0405ce6b471cb5ce3a904368fc25e55643d/contrib/completion/git-prompt.sh#L324
     if shopt -q promptvars; then
-      escaped_repository_status="$(__ps_repository_status)"
+      escaped_repository_status="$(__ps_repository_status $toplevel)"
       PS1+="\${escaped_repository_status}"
     else
-      PS1+="$(__ps_repository_status)"
+      PS1+="$(__ps_repository_status $toplevel)"
     fi
 
     PS1+="$__ps_color_reset\n↳ "
