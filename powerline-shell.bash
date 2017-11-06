@@ -21,7 +21,7 @@ __ps_main() {
   readonly git_en="env LANG=C git"
 
   __ps_repository_status() {
-    type git > /dev/null 2>&1 || return
+    hash git 2>/dev/null || return
 
     local -r branch=$($git_en symbolic-ref --short HEAD 2>/dev/null || $git_en describe --tags --always 2>/dev/null)
 
@@ -88,4 +88,4 @@ __ps_main() {
   PROMPT_COMMAND="__ps_ps1; $PROMPT_COMMAND"
 }
 
-__ps_main
+__ps_main && unset -f __ps_main
