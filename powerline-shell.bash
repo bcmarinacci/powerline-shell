@@ -15,7 +15,7 @@ __ps_main() {
   readonly __ps_color_bg_base="\[$(tput setab 7)\]"
   readonly __ps_color_bg_exit_nonzero="\[$(tput setab 1)\]"
   readonly __ps_color_bg_exit_zero="\[$(tput setab 2)\]"
-  readonly __ps_color_bg_git="\[$(tput setab 3)\]"
+  readonly __ps_color_bg_git="\[$(tput setab 7)\]"
   readonly __ps_color_reset="\[$(tput sgr0)\]"
 
   readonly git_en="env LANG=C git"
@@ -48,7 +48,7 @@ __ps_main() {
     local -r commits_behind=$(echo "$git_status_branch" | egrep '^##' | egrep -o 'behind \d+' | egrep -o '\d+')
     [[ -n "$commits_behind" ]] && status_indicators+=" $__ps_pull_indicator$commits_behind"
 
-    printf " $__ps_branch_indicator  $branch $status_indicators "
+    printf "$__ps_branch_indicator  $branch $status_indicators "
   }
 
   __ps_ps1() {
