@@ -63,7 +63,7 @@ __ps_main() {
       PS1="${__ps_color_bg_exit_nonzero} "
     fi
 
-    PS1+="${__ps_color_reset}${__ps_color_bg_base}${__ps_color_fg_base} "
+    PS1+="${__ps_color_reset}${__ps_color_bg_base}${__ps_color_fg_base} \\t "
 
     local -r prefix=$(git rev-parse --show-prefix 2>/dev/null)
     local -r toplevel=$(git rev-parse --show-toplevel 2>/dev/null)
