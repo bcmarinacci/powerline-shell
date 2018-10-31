@@ -11,12 +11,12 @@ __ps_main() {
   readonly __ps_push_indicator='⇡'
   readonly __ps_pull_indicator='⇣'
 
-  readonly __ps_color_fg_base="\[$(tput setaf 0)\]"
-  readonly __ps_color_bg_base="\[$(tput setab 7)\]"
-  readonly __ps_color_bg_exit_nonzero="\[$(tput setab 1)\]"
-  readonly __ps_color_bg_exit_zero="\[$(tput setab 2)\]"
-  readonly __ps_color_bg_git="\[$(tput setab 7)\]"
-  readonly __ps_color_reset="\[$(tput sgr0)\]"
+  readonly __ps_color_fg_base="\\[$(tput setaf 0)\\]"
+  readonly __ps_color_bg_base="\\[$(tput setab 7)\\]"
+  readonly __ps_color_bg_exit_nonzero="\\[$(tput setab 1)\\]"
+  readonly __ps_color_bg_exit_zero="\\[$(tput setab 2)\\]"
+  readonly __ps_color_bg_git="\\[$(tput setab 7)\\]"
+  readonly __ps_color_reset="\\[$(tput sgr0)\\]"
 
   readonly git_en="env LANG=C git"
 
@@ -34,24 +34,25 @@ __ps_main() {
       local status_indicators="$__ps_dirty_indicator"
     fi
 
-    local -r staged_files=$(echo "$git_status" | egrep '^[A-Z]' | wc -l | egrep -o '\d+')
+    local -r staged_files=$(echo "$git_status" | grep -cE '^[A-Z]' | grep -Eo '\d+')
     [[ $staged_files -gt 0 ]] 2>/dev/null && status_indicators+=" $__ps_staged_indicator$staged_files"
-    local -r unstaged_files=$(echo "$git_status" | egrep '^.[A-Z]' | wc -l | egrep -o '\d+')
+    local -r unstaged_files=$(echo "$git_status" | grep -cE '^.[A-Z]' | grep -Eo '\d+')
     [[ $unstaged_files -gt 0 ]] 2>/dev/null && status_indicators+=" $__ps_unstaged_indicator$unstaged_files"
-    local -r stash_items=$($git_en stash list | wc -l | egrep -o '\d+')
+    local -r stash_items=$($git_en stash list | wc -l | grep -Eo '\d+')
     [[ $stash_items -gt 0 ]] 2>/dev/null && status_indicators+=" $__ps_stash_indicator$stash_items"
-    local -r untracked_files=$(echo "$git_status" | egrep '^\?\?' | wc -l | egrep -o '\d+')
+    local -r untracked_files=$(echo "$git_status" | grep -cE '^\?\?' | grep -Eo '\d+')
     [[ $untracked_files -gt 0 ]] 2>/dev/null && status_indicators+=" $__ps_untracked_indicator$untracked_files"
     local -r git_status_branch=$($git_en status --porcelain --branch)
-    local -r commits_ahead=$(echo "$git_status_branch" | egrep '^##' | egrep -o 'ahead \d+' | egrep -o '\d+')
+    local -r commits_ahead=$(echo "$git_status_branch" | grep -E '^##' | grep -Eo 'ahead \d+' | grep -Eo '\d+')
     [[ -n "$commits_ahead" ]] && status_indicators+=" $__ps_push_indicator$commits_ahead"
-    local -r commits_behind=$(echo "$git_status_branch" | egrep '^##' | egrep -o 'behind \d+' | egrep -o '\d+')
+    local -r commits_behind=$(echo "$git_status_branch" | grep -E '^##' | grep -Eo 'behind \d+' | grep -Eo '\d+')
     [[ -n "$commits_behind" ]] && status_indicators+=" $__ps_pull_indicator$commits_behind"
 
-    printf "$__ps_branch_indicator  $branch $status_indicators "
+    printf '%s  %s %s ' "$__ps_branch_indicator"  "$branch" "$status_indicators"
   }
 
   __ps_ps1() {
+    # shellcheck disable=SC2181
     if [[ $? -eq 0 ]]; then
       PS1="$__ps_color_bg_exit_zero "
     else
@@ -64,11 +65,11 @@ __ps_main() {
     local -r toplevel=$($git_en rev-parse --show-toplevel 2>/dev/null)
     local -r git_dir=$($git_en rev-parse --git-dir 2>/dev/null)
     if [[ -n "$prefix" ]]; then
-      PS1+="$(basename $toplevel)/${prefix%/}"
+      PS1+="$(basename "$toplevel")/${prefix%/}"
     elif [[ -d "$git_dir" && "$toplevel" = "$(pwd)" ]]; then
-      PS1+="\W"
+      PS1+="\\W"
     else
-      PS1+="\w"
+      PS1+="\\w"
     fi
 
     PS1+=" $__ps_color_reset$__ps_color_bg_git$__ps_color_fg_base"
@@ -82,7 +83,7 @@ __ps_main() {
       PS1+="$(__ps_repository_status)"
     fi
 
-    PS1+="$__ps_color_reset\nλ "
+    PS1+="$__ps_color_reset\\nλ "
   }
 
   PROMPT_COMMAND="__ps_ps1; $PROMPT_COMMAND"
