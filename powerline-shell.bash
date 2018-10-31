@@ -18,16 +18,14 @@ __ps_main() {
   readonly __ps_color_bg_git="\\[$(tput setab 7)\\]"
   readonly __ps_color_reset="\\[$(tput sgr0)\\]"
 
-  readonly git_en="env LANG=C git"
-
   __ps_repository_status() {
     hash git 2>/dev/null || return
 
-    local -r branch=$($git_en symbolic-ref --short HEAD 2>/dev/null || $git_en describe --tags --always 2>/dev/null)
+    local -r branch=$(git symbolic-ref --short HEAD 2>/dev/null || git describe --tags --always 2>/dev/null)
 
     [[ -n "${branch}" ]] || return
 
-    local -r git_status=$($git_en status --porcelain)
+    local -r git_status=$(git status --porcelain)
     if [[ -z "${git_status}" ]]; then
       local status_indicators="${__ps_clean_indicator}"
     else
@@ -40,13 +38,13 @@ __ps_main() {
     local -r unstaged_files=$(echo "${git_status}" | grep -cE '^.[A-Z]' | grep -Eo '\d+')
     [[ "${unstaged_files}" -gt 0 ]] 2>/dev/null && status_indicators+=" ${__ps_unstaged_indicator}${unstaged_files}"
 
-    local -r stash_items=$($git_en stash list | wc -l | grep -Eo '\d+')
+    local -r stash_items=$(git stash list | wc -l | grep -Eo '\d+')
     [[ "${stash_items}" -gt 0 ]] 2>/dev/null && status_indicators+=" ${__ps_stash_indicator}${stash_items}"
 
     local -r untracked_files=$(echo "${git_status}" | grep -cE '^\?\?' | grep -Eo '\d+')
     [[ "${untracked_files}" -gt 0 ]] 2>/dev/null && status_indicators+=" ${__ps_untracked_indicator}${untracked_files}"
 
-    local -r git_status_branch=$($git_en status --porcelain --branch)
+    local -r git_status_branch=$(git status --porcelain --branch)
 
     local -r commits_ahead=$(echo "${git_status_branch}" | grep -E '^##' | grep -Eo 'ahead \d+' | grep -Eo '\d+')
     [[ -n "${commits_ahead}" ]] && status_indicators+=" ${__ps_push_indicator}${commits_ahead}"
@@ -67,9 +65,9 @@ __ps_main() {
 
     PS1+="${__ps_color_reset}${__ps_color_bg_base}${__ps_color_fg_base} "
 
-    local -r prefix=$($git_en rev-parse --show-prefix 2>/dev/null)
-    local -r toplevel=$($git_en rev-parse --show-toplevel 2>/dev/null)
-    local -r git_dir=$($git_en rev-parse --git-dir 2>/dev/null)
+    local -r prefix=$(git rev-parse --show-prefix 2>/dev/null)
+    local -r toplevel=$(git rev-parse --show-toplevel 2>/dev/null)
+    local -r git_dir=$(git rev-parse --git-dir 2>/dev/null)
     if [[ -n "$prefix" ]]; then
       PS1+="$(basename "$toplevel")/${prefix%/}"
     elif [[ -d "$git_dir" && "$toplevel" = "$(pwd)" ]]; then
