@@ -63,7 +63,7 @@ __ps_main() {
       PS1="${__ps_color_bg_exit_nonzero} "
     fi
 
-    PS1+="${__ps_color_reset}${__ps_color_bg_base}${__ps_color_fg_base} \\t "
+    PS1+="${__ps_color_reset}${__ps_color_bg_base}${__ps_color_fg_base} "
 
     local -r prefix=$(git rev-parse --show-prefix 2>/dev/null)
     local -r toplevel=$(git rev-parse --show-toplevel 2>/dev/null)
@@ -87,7 +87,7 @@ __ps_main() {
       PS1+="$(__ps_repository_status)"
     fi
 
-    PS1+="${__ps_color_reset}\\nλ "
+    PS1+="| \\A ${__ps_color_reset}\\nλ "
   }
 
   PROMPT_COMMAND="__ps_ps1; ${PROMPT_COMMAND}"
