@@ -38,12 +38,12 @@ __ps_main() {
     local -r unstaged_files=$(echo "${git_status}" | grep -cE '^.[A-Z]' | grep -Eo '\d+')
     [[ "${unstaged_files}" -gt 0 ]] 2>/dev/null && status_indicators+=" ${__ps_unstaged_indicator}${unstaged_files}"
 
-    local -r stash_items=$(git stash list | wc -l | grep -Eo '\d+')
-    [[ "${stash_items}" -gt 0 ]] 2>/dev/null && status_indicators+=" ${__ps_stash_indicator}${stash_items}"
-
     local -r untracked_files=$(echo "${git_status}" | grep -cE '^\?\?' | grep -Eo '\d+')
     [[ "${untracked_files}" -gt 0 ]] 2>/dev/null && status_indicators+=" ${__ps_untracked_indicator}${untracked_files}"
-
+    
+    local -r stash_items=$(git stash list | wc -l | grep -Eo '\d+')
+    [[ "${stash_items}" -gt 0 ]] 2>/dev/null && status_indicators+=" ${__ps_stash_indicator}${stash_items}"
+    
     local -r git_status_branch=$(git status --porcelain --branch)
 
     local -r commits_ahead=$(echo "${git_status_branch}" | grep -E '^##' | grep -Eo 'ahead \d+' | grep -Eo '\d+')
