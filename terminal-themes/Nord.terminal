@@ -198,9 +198,13 @@
 	</data>
 	<key>ShouldLimitScrollback</key>
 	<integer>0</integer>
+	<key>ShowActiveProcessArgumentsInTabTitle</key>
+	<false/>
 	<key>ShowCommandKeyInTitle</key>
 	<true/>
 	<key>ShowDimensionsInTitle</key>
+	<false/>
+	<key>ShowRepresentedURLPathInTabTitle</key>
 	<false/>
 	<key>ShowRepresentedURLPathInTitle</key>
 	<true/>
