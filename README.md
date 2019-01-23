@@ -39,9 +39,10 @@ $ printf ". ~/.powerline-shell.bash\n" >> ~/.bash_profile
 
 ## Prior Art
 
-powerline-shell was inspired by the following phenomenal packages:
-- [Powerline](https://github.com/powerline/powerline)
-- [bash-git-prompt](https://github.com/magicmonty/bash-git-prompt)
-- [bash-powerline](https://github.com/riobard/bash-powerline)
-
-The theme used in the screenshot is [Tomorrow Night Eighties](https://github.com/chriskempson/tomorrow-theme)
+https://github.com/arcticicestudio/nord-terminal-app\
+https://github.com/chriskempson/tomorrow-theme\
+https://github.com/magicmonty/bash-git-prompt\
+https://github.com/powerline/powerline\
+https://github.com/riobard/bash-powerline\
+https://github.com/robinbentley/oceanic-next-macos-terminal\
+https://github.com/voronianski/oceanic-next-color-scheme\
