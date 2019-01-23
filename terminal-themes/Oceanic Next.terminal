@@ -1461,7 +1461,7 @@
 	kQ2eDaENrg2zDbsNvg3QDdMN2AAAAAAAAAIBAAAAAAAAAC8AAAAAAAAAAAAAAAAAAA3a
 	</data>
 	<key>ShowActiveProcessArgumentsInTabTitle</key>
-	<false/>
+	<true/>
 	<key>ShowCommandKeyInTitle</key>
 	<true/>
 	<key>ShowDimensionsInTitle</key>
