@@ -39,10 +39,10 @@ $ printf ". ~/.powerline-shell.bash\n" >> ~/.bash_profile
 
 ## Prior Art
 
-https://github.com/arcticicestudio/nord-terminal-app\
-https://github.com/chriskempson/tomorrow-theme\
-https://github.com/magicmonty/bash-git-prompt\
-https://github.com/powerline/powerline\
-https://github.com/riobard/bash-powerline\
-https://github.com/robinbentley/oceanic-next-macos-terminal\
-https://github.com/voronianski/oceanic-next-color-scheme\
+https://github.com/arcticicestudio/nord-terminal-app<br />
+https://github.com/chriskempson/tomorrow-theme<br />
+https://github.com/magicmonty/bash-git-prompt<br />
+https://github.com/powerline/powerline<br />
+https://github.com/riobard/bash-powerline<br />
+https://github.com/robinbentley/oceanic-next-macos-terminal<br />
+https://github.com/voronianski/oceanic-next-color-scheme
