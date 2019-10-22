@@ -8,8 +8,8 @@ __ps_main() {
   readonly __ps_unstaged_indicator='-'
   readonly __ps_untracked_indicator='?'
   readonly __ps_stash_indicator='¢'
-  readonly __ps_push_indicator='⇡'
   readonly __ps_pull_indicator='⇣'
+  readonly __ps_push_indicator='⇡'
 
   readonly __ps_color_fg_base="\\[$(tput setaf 0)\\]"
   readonly __ps_color_bg_base="\\[$(tput setab 7)\\]"
@@ -45,12 +45,12 @@ __ps_main() {
     [[ "${stash_items}" -gt 0 ]] 2>/dev/null && status_indicators+=" ${__ps_stash_indicator}${stash_items}"
     
     local -r git_status_branch=$(git status --porcelain --branch)
+    
+    local -r commits_behind=$(echo "${git_status_branch}" | grep -E '^##' | grep -Eo 'behind \d+' | grep -Eo '\d+')
+    [[ -n "${commits_behind}" ]] && status_indicators+=" ${__ps_pull_indicator}${commits_behind}"
 
     local -r commits_ahead=$(echo "${git_status_branch}" | grep -E '^##' | grep -Eo 'ahead \d+' | grep -Eo '\d+')
     [[ -n "${commits_ahead}" ]] && status_indicators+=" ${__ps_push_indicator}${commits_ahead}"
-
-    local -r commits_behind=$(echo "${git_status_branch}" | grep -E '^##' | grep -Eo 'behind \d+' | grep -Eo '\d+')
-    [[ -n "${commits_behind}" ]] && status_indicators+=" ${__ps_pull_indicator}${commits_behind}"
 
     printf '%s  %s %s ' "${__ps_branch_indicator}"  "${branch}" "${status_indicators}"
   }
