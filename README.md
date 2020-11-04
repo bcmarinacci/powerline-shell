@@ -1,4 +1,4 @@
-# powerline-shell
+# Powerline Shell
 
 > A Powerline-style shell prompt written in pure Bash
 
